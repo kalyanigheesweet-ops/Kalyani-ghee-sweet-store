@@ -1,12 +1,22 @@
 const REMEMBERED_IDENTIFIER_KEY = "kalyani.auth.remembered-identifier";
 
+const defaultFirebaseConfig = {
+  apiKey: "AIzaSyDdl1Er8Qib8iLXVcIKmjXFlELYPWy-9_0",
+  authDomain: "kalyani-ghee-sweets-hnk.firebaseapp.com",
+  projectId: "kalyani-ghee-sweets-hnk",
+  storageBucket: "kalyani-ghee-sweets-hnk.firebasestorage.app",
+  messagingSenderId: "279505137310",
+  appId: "1:279505137310:web:0d8b71027fd310174c958f",
+};
+
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || defaultFirebaseConfig.apiKey,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || defaultFirebaseConfig.authDomain,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || defaultFirebaseConfig.projectId,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || defaultFirebaseConfig.storageBucket,
+  messagingSenderId:
+    import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || defaultFirebaseConfig.messagingSenderId,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || defaultFirebaseConfig.appId,
 };
 
 const firebaseConfigured = Object.values(firebaseConfig).every(Boolean);
