@@ -101,7 +101,7 @@ export function Header() {
 
       <div className="border-b border-gold-soft bg-white">
         <div className="mx-auto flex min-h-[112px] max-w-7xl items-center gap-8 px-4 py-2">
-          <Link to="/" className="w-[220px] shrink-0 lg:flex-1">
+          <Link to="/" className="w-[220px] shrink-0 lg:flex-1" onClick={() => setMobileOpen(false)}>
             <span className="block overflow-hidden bg-white">
               <img
                 src={logo}
@@ -170,6 +170,7 @@ export function Header() {
                 to="/wishlist"
                 className="relative hidden items-center gap-2 px-3 text-primary transition hover:text-brown lg:flex"
                 aria-label="Wishlist"
+                onClick={() => setMobileOpen(false)}
               >
                 <Heart className="size-7" />
                 <span className="text-base font-semibold">Wishlist</span>
@@ -185,6 +186,7 @@ export function Header() {
                 to="/wishlist"
                 className="relative grid size-10 place-items-center rounded-full text-primary transition hover:bg-secondary lg:hidden"
                 aria-label="Wishlist"
+                onClick={() => setMobileOpen(false)}
               >
                 <Heart className="size-5" />
                 {wishlist.length > 0 && (
@@ -195,6 +197,7 @@ export function Header() {
               </Link>
             )}
             <button
+              type="button"
               onClick={() => setMobileOpen((value) => !value)}
               className="grid size-10 place-items-center rounded-full text-primary transition hover:bg-secondary lg:hidden"
               aria-label="Toggle menu"
