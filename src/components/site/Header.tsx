@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   BookOpen,
@@ -32,6 +32,7 @@ const navItems = [
 
 export function Header() {
   const { wishlist, user, signOut } = useStore();
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -48,6 +49,12 @@ export function Header() {
     setMobileOpen(false);
     if (typeof document === "undefined") return;
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const selectSearchResult = (product: Product) => {
+    setSearchQuery("");
+    setMobileOpen(false);
+    void navigate({ to: "/product/$productId", params: { productId: product.id } });
   };
 
   return (
@@ -128,7 +135,7 @@ export function Header() {
               <Search className="size-5" />
             </button>
             {searchResults.length > 0 && (
-              <SearchResults results={searchResults} onSelect={() => setSearchQuery("")} />
+              <SearchResults results={searchResults} onSelect={selectSearchResult} />
             )}
           </form>
 
@@ -232,7 +239,7 @@ export function Header() {
               />
               <Search className="absolute right-4 top-3.5 size-4 text-brown" />
               {searchResults.length > 0 && (
-                <SearchResults results={searchResults} onSelect={() => setSearchQuery("")} />
+                <SearchResults results={searchResults} onSelect={selectSearchResult} />
               )}
             </form>
             <div className="mb-3 rounded-lg bg-primary p-3 text-primary-foreground">
@@ -268,7 +275,13 @@ export function Header() {
   );
 }
 
-function SearchResults({ results, onSelect }: { results: Product[]; onSelect: () => void }) {
+function SearchResults({
+  results,
+  onSelect,
+}: {
+  results: Product[];
+  onSelect: (product: Product) => void;
+}) {
   return (
     <div className="absolute left-0 right-0 top-full z-50 mt-2 max-h-96 overflow-y-auto rounded-lg border border-border bg-card p-2 shadow-[var(--shadow-lift)]">
       {results.map((product) => (
@@ -276,7 +289,10 @@ function SearchResults({ results, onSelect }: { results: Product[]; onSelect: ()
           key={product.id}
           to="/product/$productId"
           params={{ productId: product.id }}
-          onClick={onSelect}
+          onClick={(event) => {
+            event.preventDefault();
+            onSelect(product);
+          }}
           className="flex min-h-16 items-center gap-3 rounded-md px-3 py-2 text-left transition hover:bg-secondary"
         >
           <span className="min-w-0 flex-1">
