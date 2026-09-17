@@ -50,8 +50,8 @@ export function Footer() {
             className="h-16 w-auto rounded-xl bg-ivory p-1"
           />
           <p className="mt-4 max-w-sm text-sm opacity-85">
-            Authentic Telangana sweets, pickles and snacks prepared in pure cow ghee using
-            traditional family recipes — no dalda, no vanaspati.
+            Authentic Telangana sweets, pickles and snacks prepared in pure buffalo ghee using
+            traditional family recipes.
           </p>
           <div className="mt-5 space-y-2 text-sm opacity-90">
             <a href={`tel:${PHONE}`} className="flex items-center gap-2 hover:text-accent">

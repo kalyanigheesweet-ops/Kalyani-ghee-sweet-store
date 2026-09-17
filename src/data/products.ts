@@ -324,7 +324,7 @@ export const products: Product[] = [
   mk("Kobbari Garjalu", "Snacks", 400, kobbariGarjaluImage, { ingredients: "Rice flour, coconut, spices, salt" }),
   mk("Nuvvula Garjalu", "Snacks", 400, nuvvulaGarjaluImage, { ingredients: "Rice flour, sesame, spices, salt" }),
   mk("Chalividi", "Snacks", 400, chalividiImage, { ingredients: "Rice flour, jaggery, pure ghee" }),
-  mk("Rosecakes", "Snacks", 500, rosecakesImage, { tagline: "Crisp rose cookies, coconut-kissed", badge: "New", ingredients: "Rice flour, coconut milk, sugar, cardamom" }),
+  mk("Rosecakes", "Snacks", 500, rosecakesImage, { weights: ["200 g"], tagline: "Crisp rose cookies, coconut-kissed", badge: "New", ingredients: "Rice flour, coconut milk, sugar, cardamom" }),
 
   // ---------- NAMKEENS (per kg) ----------
   mk("Bondhi", "Namkeens", 360, bondhiImage, { ingredients: "Gram flour, peanuts, curry leaf, spices" }),
@@ -363,10 +363,10 @@ export const products: Product[] = [
   mk("Idli Karam", "Powders", 80, idliKaramImage, { tagline: "Classic idli milagai podi", weights: ["150 g"], rating: 4.8, reviews: 178, badge: "Best Seller", ingredients: `Urad dal, chana dal, red chilli, ${powderIng}` }),
 
   // ---------- PAPADS (per kg) ----------
-  mk("Palakura Papad", "Papads", 600, palakuraPapadImage, { ingredients: "Spinach, urad dal flour, spices, salt" }),
-  mk("Biyyam Papad", "Papads", 300, biyyamPapadImage, { tagline: "Sun-dried rice papads", ingredients: "Rice flour, cumin, salt" }),
+  mk("Palakura Papad", "Papads", 600, palakuraPapadImage, { weights: ["100 g"], ingredients: "Spinach, urad dal flour, spices, salt" }),
+  mk("Biyyam Papad", "Papads", 500, biyyamPapadImage, { weights: ["100 g"], tagline: "Sun-dried rice papads", ingredients: "Rice flour, cumin, salt" }),
   mk("Sabudhana Papad", "Papads", 400, sabudhanaPapadImage, { ingredients: "Sago, cumin, salt" }),
-  mk("Challa Mirchi", "Papads", 700, challaMirchiImage, { tagline: "Sun-cured buttermilk chillies", rating: 4.7, reviews: 92, badge: "New", ingredients: "Green chillies, buttermilk, salt" }),
+  mk("Challa Mirchi", "Papads", 70, challaMirchiImage, { weights: ["100 g"], tagline: "Sun-cured buttermilk chillies", rating: 4.7, reviews: 92, badge: "New", ingredients: "Green chillies, buttermilk, salt" }),
 
   // ---------- GIFT BOXES ----------
   mk("Premium Assorted Gift Box", "Gift Boxes", 1450, giftbox, {
