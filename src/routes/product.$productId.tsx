@@ -1,5 +1,5 @@
-import { Link, createFileRoute, notFound } from "@tanstack/react-router";
-import { useState } from "react";
+import { Link, createFileRoute, notFound, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { ChevronRight, Heart, Leaf, Phone, ShieldCheck, Star, Store } from "lucide-react";
 import { getProduct, products } from "@/data/products";
 import { PHONE, PHONE_DISPLAY, priceFor, useStore } from "@/lib/store";
@@ -35,10 +35,19 @@ export const Route = createFileRoute("/product/$productId")({
 
 function ProductPage() {
   const { product } = Route.useLoaderData();
-  const { user, wishlist, toggleWishlist } = useStore();
+  const navigate = useNavigate();
+  const { user, authReady, wishlist, toggleWishlist } = useStore();
   const [weight, setWeight] = useState(product.weights[0] ?? "");
   const [quick, setQuick] = useState<Product | null>(null);
   const liked = wishlist.includes(product.id);
+
+  useEffect(() => {
+    if (authReady && !user) {
+      void navigate({ to: "/login" });
+    }
+  }, [authReady, navigate, user]);
+
+  if (!authReady || !user) return null;
 
   const related = products
     .filter((p) => p.category === product.category && p.id !== product.id)
