@@ -1,4 +1,9 @@
 const REMEMBERED_IDENTIFIER_KEY = "kalyani.auth.remembered-identifier";
+const OWNER_EMAILS = new Set(
+  [import.meta.env["VITE_OWNER_EMAIL"], "kalyanigheesweet@gmail.com", "kalyanisweets@gmail.com"]
+    .filter(Boolean)
+    .map((email) => email!.trim().toLowerCase()),
+);
 
 const defaultFirebaseConfig = {
   apiKey: "AIzaSyDdl1Er8Qib8iLXVcIKmjXFlELYPWy-9_0",
@@ -10,13 +15,13 @@ const defaultFirebaseConfig = {
 };
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || defaultFirebaseConfig.apiKey,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || defaultFirebaseConfig.authDomain,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || defaultFirebaseConfig.projectId,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || defaultFirebaseConfig.storageBucket,
+  apiKey: import.meta.env["VITE_FIREBASE_API_KEY"] || defaultFirebaseConfig.apiKey,
+  authDomain: import.meta.env["VITE_FIREBASE_AUTH_DOMAIN"] || defaultFirebaseConfig.authDomain,
+  projectId: import.meta.env["VITE_FIREBASE_PROJECT_ID"] || defaultFirebaseConfig.projectId,
+  storageBucket: import.meta.env["VITE_FIREBASE_STORAGE_BUCKET"] || defaultFirebaseConfig.storageBucket,
   messagingSenderId:
-    import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || defaultFirebaseConfig.messagingSenderId,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || defaultFirebaseConfig.appId,
+    import.meta.env["VITE_FIREBASE_MESSAGING_SENDER_ID"] || defaultFirebaseConfig.messagingSenderId,
+  appId: import.meta.env["VITE_FIREBASE_APP_ID"] || defaultFirebaseConfig.appId,
 };
 
 const firebaseConfigured = Object.values(firebaseConfig).every(Boolean);
@@ -120,6 +125,62 @@ export async function signInWithGoogle() {
 export async function getSession() {
   if (!auth) return null;
   return mapUser(auth.currentUser);
+}
+
+export function isOwnerEmail(email: string | null | undefined) {
+  return email ? OWNER_EMAILS.has(email.trim().toLowerCase()) : false;
+}
+
+export type CustomerReview = {
+  id?: string;
+  productId: string;
+  productName: string;
+  productImage: string;
+  rating: number;
+  comment: string;
+  customerName: string;
+  customerEmail: string;
+  createdAt: string;
+};
+
+export async function saveCustomerReview(review: Omit<CustomerReview, "id" | "createdAt">) {
+  const currentAuth = requireAuth();
+  if (!firebaseAppModule) throw new Error("Review storage is not configured.");
+  const firestoreModule = await import("firebase/firestore");
+  const database = firestoreModule.getFirestore(firebaseAppModule.getApp());
+  await firestoreModule.addDoc(firestoreModule.collection(database, "customerReviews"), {
+    ...review,
+    userId: currentAuth.currentUser?.uid ?? "",
+    createdAt: firestoreModule.serverTimestamp(),
+  });
+}
+
+export async function getCustomerReviews() {
+  const currentAuth = requireAuth();
+  if (!firebaseAppModule) throw new Error("Review storage is not configured.");
+  const firestoreModule = await import("firebase/firestore");
+  const database = firestoreModule.getFirestore(firebaseAppModule.getApp());
+  const snapshot = await firestoreModule.getDocs(
+    firestoreModule.collection(database, "customerReviews"),
+  );
+
+  return snapshot.docs
+    .map((review) => {
+      const data = review.data();
+      const timestamp = data["createdAt"]?.toDate?.();
+      return {
+        id: review.id,
+        productId: String(data["productId"] ?? ""),
+        productName: String(data["productName"] ?? ""),
+        productImage: String(data["productImage"] ?? ""),
+        rating: Number(data["rating"] ?? 0),
+        comment: String(data["comment"] ?? ""),
+        customerName: String(data["customerName"] ?? ""),
+        customerEmail: String(data["customerEmail"] ?? ""),
+        createdAt: timestamp instanceof Date ? timestamp.toISOString() : "",
+      } satisfies CustomerReview;
+    })
+    .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
 }
 
 export function onAuthStateChange(callback: (user: ReturnType<typeof mapUser>) => void) {

@@ -7,6 +7,7 @@ import {
   Instagram,
   Map,
   MapPin,
+  MessageSquare,
   Menu,
   Search,
   ShieldCheck,
@@ -15,6 +16,7 @@ import {
 } from "lucide-react";
 import logo from "@/assets/kalyani-logo.svg";
 import { categories, products, type Product } from "@/data/products";
+import { isOwnerEmail } from "@/lib/auth-security";
 import { INSTAGRAM_URL, STORE_MAP_URL, useStore } from "@/lib/store";
 
 const navItems = [
@@ -77,15 +79,27 @@ export function Header() {
           </div>
           <div className="ml-auto mr-1 flex items-center justify-end pr-1">
             {user ? (
-              <button
-                className="flex h-8 items-center gap-2 bg-primary px-5 text-sm text-primary-foreground transition hover:bg-primary/90"
-                type="button"
-                onClick={signOut}
-                title={`Sign out ${user.name}`}
-              >
-                <User className="size-5" strokeWidth={1.5} />
-                <span>Sign Out</span>
-              </button>
+              <>
+                {isOwnerEmail(user.email) && (
+                  <Link
+                    className="flex h-8 items-center gap-2 border-r border-primary-foreground/20 bg-primary px-4 text-sm text-primary-foreground transition hover:bg-primary/90"
+                    to="/reviews"
+                    title="View customer reviews"
+                  >
+                    <MessageSquare className="size-4" strokeWidth={1.7} />
+                    <span>Reviews</span>
+                  </Link>
+                )}
+                <button
+                  className="flex h-8 items-center gap-2 bg-primary px-5 text-sm text-primary-foreground transition hover:bg-primary/90"
+                  type="button"
+                  onClick={signOut}
+                  title={`Sign out ${user.name}`}
+                >
+                  <User className="size-5" strokeWidth={1.5} />
+                  <span>Sign Out</span>
+                </button>
+              </>
             ) : (
               <Link
                 className="flex h-8 items-center gap-2 bg-primary px-5 text-sm text-primary-foreground transition hover:bg-primary/90"
@@ -181,6 +195,14 @@ export function Header() {
                 )}
               </Link>
             )}
+            {user && isOwnerEmail(user.email) && (
+              <Link
+                to="/reviews"
+                className="hidden items-center gap-2 px-3 text-primary transition hover:text-brown lg:flex"
+              >
+                <span className="text-base font-semibold">Reviews</span>
+              </Link>
+            )}
             {user && (
               <Link
                 to="/wishlist"
@@ -211,20 +233,10 @@ export function Header() {
           <ul className="mx-auto flex h-9 w-full items-stretch">
             {navItems.map((item) => (
               <li key={item} className="flex-1 min-w-0">
-                <a
-                  href={
-                    item === "Home"
-                      ? "/"
-                      : item === "About Us"
-                        ? "/about-us"
-                      : item === "Offers"
-                        ? "#offers"
-                        : `/category/${encodeURIComponent(item)}`
-                  }
+                <NavItemLink
+                  item={item}
                   className="flex h-full w-full items-center justify-center whitespace-nowrap px-2 text-center text-[0.72rem] font-bold uppercase tracking-[0.06em] text-primary-foreground transition hover:text-accent"
-                >
-                  {item}
-                </a>
+                />
               </li>
             ))}
           </ul>
@@ -253,21 +265,11 @@ export function Header() {
             <ul className="grid grid-cols-2 gap-1">
               {navItems.map((item) => (
                 <li key={item}>
-                  <a
-                    href={
-                      item === "Home"
-                        ? "/"
-                        : item === "About Us"
-                          ? "/about-us"
-                          : item === "Offers"
-                            ? "#offers"
-                            : `/category/${encodeURIComponent(item)}`
-                    }
+                  <NavItemLink
+                    item={item}
                     onClick={() => setMobileOpen(false)}
                     className="block w-full rounded-lg px-3 py-2 text-left text-sm font-semibold text-primary hover:bg-secondary"
-                  >
-                    {item}
-                  </a>
+                  />
                 </li>
               ))}
             </ul>
@@ -275,6 +277,43 @@ export function Header() {
         )}
       </div>
     </header>
+  );
+}
+
+function NavItemLink({
+  item,
+  className,
+  onClick,
+}: {
+  item: (typeof navItems)[number];
+  className: string;
+  onClick?: () => void;
+}) {
+  if (item === "Home") {
+    return (
+      <Link to="/" className={className} onClick={onClick}>
+        {item}
+      </Link>
+    );
+  }
+
+  if (item === "About Us") {
+    return (
+      <Link to="/about-us" className={className} onClick={onClick}>
+        {item}
+      </Link>
+    );
+  }
+
+  return (
+    <Link
+      to="/category/$category"
+      params={{ category: item }}
+      className={className}
+      onClick={onClick}
+    >
+      {item}
+    </Link>
   );
 }
 

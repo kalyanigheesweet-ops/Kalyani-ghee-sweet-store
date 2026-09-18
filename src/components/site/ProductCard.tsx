@@ -13,7 +13,10 @@ export function ProductCard({
 }) {
   const { user, wishlist, toggleWishlist } = useStore();
   const [selectedWeight, setSelectedWeight] = useState(product.weights[0] ?? "");
+  const [ratingOpen, setRatingOpen] = useState(false);
+  const [userRating, setUserRating] = useState<number | null>(null);
   const liked = wishlist.includes(product.id);
+  const displayedRating = userRating ?? product.rating;
 
   return (
     <article className="group card-surface relative flex max-w-[240px] flex-col overflow-hidden transition duration-300 hover:shadow-[var(--shadow-lift)] sm:max-w-none">
@@ -64,10 +67,37 @@ export function ProductCard({
               {product.name}
             </Link>
           </h3>
-          <span className="flex shrink-0 items-center gap-1 rounded-full bg-secondary px-1.5 py-0.5 text-[10px] font-semibold text-primary">
-            <Star className="size-3 fill-gold text-gold" />
-            {product.rating}
-          </span>
+          <div className="relative shrink-0">
+            <button
+              type="button"
+              aria-expanded={ratingOpen}
+              aria-label={`Rate ${product.name}. Current rating ${displayedRating}`}
+              title="Click to rate this product"
+              onClick={() => setRatingOpen((open) => !open)}
+              className="flex cursor-pointer items-center gap-1 rounded-full bg-secondary px-1.5 py-0.5 text-[10px] font-semibold text-primary transition hover:bg-gold/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+            >
+              <Star className="size-3 fill-gold text-gold" />
+              {displayedRating}
+            </button>
+            {ratingOpen && (
+              <div className="absolute right-0 top-full z-20 mt-1 flex items-center gap-0.5 rounded-full border border-gold-soft bg-card p-1 shadow-[var(--shadow-card)]">
+                {[1, 2, 3, 4, 5].map((value) => (
+                  <button
+                    key={value}
+                    type="button"
+                    aria-label={`Give ${value} star${value === 1 ? "" : "s"}`}
+                    onClick={() => {
+                      setUserRating(value);
+                      setRatingOpen(false);
+                    }}
+                    className="rounded-full p-1 text-muted-foreground transition hover:bg-secondary hover:text-gold"
+                  >
+                    <Star className="size-3.5 fill-current" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         <p className="line-clamp-2 text-[10px] text-muted-foreground">{product.tagline}</p>
 

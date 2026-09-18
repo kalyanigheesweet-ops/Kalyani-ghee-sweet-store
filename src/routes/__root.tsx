@@ -3,15 +3,17 @@ import {
   Outlet,
   Link,
   createRootRouteWithContext,
+  useNavigate,
   useRouter,
   HeadContent,
   Scripts,
   useRouterState,
 } from "@tanstack/react-router";
+import { useEffect } from "react";
 import type { ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { StoreProvider } from "@/lib/store";
+import { StoreProvider, useStore } from "@/lib/store";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 
@@ -128,17 +130,36 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const pathname = useRouterState({ select: (state) => state.location.pathname });
-  const isAuthRoute = pathname === "/login" || pathname === "/signup";
-
   return (
     <QueryClientProvider client={queryClient}>
       <StoreProvider>
+        <AuthenticatedApp />
+      </StoreProvider>
+    </QueryClientProvider>
+  );
+}
+
+function AuthenticatedApp() {
+  const navigate = useNavigate();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const isAuthRoute = pathname === "/login" || pathname === "/signup";
+  const isHomeRoute = pathname === "/";
+  const { authReady, user } = useStore();
+
+  useEffect(() => {
+    if (authReady && !user && !isHomeRoute && !isAuthRoute) {
+      void navigate({ to: "/login", replace: true });
+    }
+  }, [authReady, isAuthRoute, isHomeRoute, navigate, user]);
+
+  return (
+    authReady || isHomeRoute || isAuthRoute ? (
+      <>
         {!isAuthRoute && <Header />}
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         {!isAuthRoute && <Footer />}
-      </StoreProvider>
-    </QueryClientProvider>
+      </>
+    ) : null
   );
 }

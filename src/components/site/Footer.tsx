@@ -47,7 +47,7 @@ export function Footer() {
             alt="Kalyani Ghee Sweets"
             width={200}
             height={124}
-            className="h-16 w-auto rounded-xl bg-ivory p-1"
+            className="h-24 w-auto rounded-xl bg-ivory p-1"
           />
           <p className="mt-4 max-w-sm text-sm opacity-85">
             Authentic Telangana sweets, pickles and snacks prepared in pure buffalo ghee using

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { ChevronRight, Gift, Leaf, MapPin, ShieldCheck, Soup, Star, Phone } from "lucide-react";
 import heroImg from "@/assets/Kalyani background.png";
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Shop authentic Telangana sweets, laddus, pickles, snacks and namkeens made fresh in 100% pure cow ghee. No dalda, no vanaspati. Hygienically prepared and freshly packed at our Karimnagar store.",
+          "Shop authentic Telangana sweets, laddus, pickles, snacks and namkeens made fresh in 100% pure cow ghee. Rich Taste | Authentic Goodness. Hygienically prepared and freshly packed at our Karimnagar store.",
       },
       { property: "og:title", content: "Kalyani Ghee Sweets | Pure Ghee, Perfect Love" },
       {
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/")({
 });
 
 const usps = [
-  { icon: Leaf, title: "100% Pure Ghee", sub: "No Dalda | No Vanaspati" },
+  { icon: Leaf, title: "100% Pure Ghee", sub: "Rich Taste | Authentic Goodness" },
   { icon: Soup, title: "Traditional Recipes", sub: "From Generations" },
   { icon: ShieldCheck, title: "Freshly Made", sub: "With Love" },
   { icon: Gift, title: "Hygienic Packaging", sub: "Safe & Secure" },
@@ -136,9 +136,10 @@ function Index() {
         </div>
         <div className="mt-3 grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-7 lg:gap-4">
           {categoryImages.map((c) => (
-            <a
+            <Link
               key={c.category}
-              href={`/category/${encodeURIComponent(c.category)}`}
+              to="/category/$category"
+              params={{ category: c.category }}
               className="group flex flex-col items-center gap-3"
             >
               <span className="grid size-16 place-items-center overflow-hidden rounded-full border border-gold-soft bg-ivory p-1.5 shadow-[var(--shadow-card)] transition group-hover:shadow-[var(--shadow-gold)] md:size-20">
@@ -150,7 +151,7 @@ function Index() {
                 />
               </span>
               <span className="text-[10px] font-bold text-primary md:text-xs">{c.category}</span>
-            </a>
+            </Link>
           ))}
         </div>
       </section>
@@ -180,25 +181,22 @@ function Index() {
         />
         <div>
           <p className="eyebrow">Our Story</p>
-          <h2 className="section-title mt-2">Made the way it was always made</h2>
+          <h2 className="section-title mt-2">From a Small Beginning in 2002 to a Taste Loved by Generations</h2>
           <div className="ornament my-3 w-32" />
           <p className="text-sm leading-relaxed text-muted-foreground">
-            For three generations, Kalyani Ghee Sweets has been slow-roasting besan, pounding fresh
-            spices and setting sweets by hand in small batches. We use only pure cow ghee — never
-            dalda, never vanaspati — so every laddu carries the aroma of a Telangana kitchen.
+            Since <strong>2002</strong>, Kalyani Ghee Sweets has been bringing the authentic flavours
+            of Telangana to every home. What started as a passion for traditional sweets has grown
+            into a trusted collection of <strong>sweets, pickles, snacks, namkeens, papads and powders</strong>.
           </p>
-          <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-            {[
-              "Small-batch, made fresh daily",
-              "Hand-picked nuts & spices",
-              "Hygienic, food-grade packing",
-              "Fresh every morning",
-            ].map((t) => (
-              <li key={t} className="flex items-center gap-2 text-sm text-primary">
-                <ShieldCheck className="size-4 text-gold" /> {t}
-              </li>
-            ))}
-          </ul>
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+            We believe that great taste comes from <strong>quality ingredients, traditional recipes
+            and careful preparation</strong>. From rich ghee sweets to flavourful pickles, crispy
+            snacks, savoury namkeens, handmade papads and aromatic powders, every product is made
+            to bring the comforting taste of homemade goodness to your table.
+          </p>
+          <p className="mt-3 text-sm font-semibold leading-relaxed text-primary">
+            Rooted in tradition. Made with care. Loved since 2002.
+          </p>
         </div>
       </section>
 

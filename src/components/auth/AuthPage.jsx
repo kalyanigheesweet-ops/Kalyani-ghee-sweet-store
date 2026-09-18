@@ -63,9 +63,14 @@ function validateSignup(values) {
   return errors;
 }
 
-function GoogleButton({ onSignIn, submitting }) {
+function GoogleButton({ onSignIn, submitting, large = false }) {
   return (
-    <button className="auth-google-button" type="button" onClick={onSignIn} disabled={submitting}>
+    <button
+      className={`auth-google-button${large ? " auth-google-button--large" : ""}`}
+      type="button"
+      onClick={onSignIn}
+      disabled={submitting}
+    >
       <span className="google-mark" aria-hidden="true">
         G
       </span>
@@ -236,7 +241,11 @@ export function AuthPage({ mode }) {
                 <div className="auth-divider" aria-hidden="true">
                   OR
                 </div>
-                <GoogleButton onSignIn={submitGoogle} submitting={submitting === "google"} />
+                <GoogleButton
+                  onSignIn={submitGoogle}
+                  submitting={submitting === "google"}
+                  large
+                />
                 {status.login && (
                   <p className="auth-status" role="status">
                     {status.login}

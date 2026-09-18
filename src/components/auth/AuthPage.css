@@ -299,9 +299,29 @@
 }
 
 .google-mark {
-  color: #4285f4;
+  background: conic-gradient(
+    from -45deg,
+    #4285f4 0 25%,
+    #34a853 25% 50%,
+    #fbbc05 50% 72%,
+    #ea4335 72% 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
   font-size: 18px;
   font-weight: 800;
+}
+
+.auth-google-button--large {
+  min-height: 64px;
+  border-radius: 12px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.auth-google-button--large .google-mark {
+  font-size: 30px;
 }
 
 .auth-status {
