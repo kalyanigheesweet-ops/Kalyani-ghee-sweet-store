@@ -148,15 +148,11 @@ export async function saveCustomerReview(review: Omit<CustomerReview, "id" | "cr
   if (!firebaseAppModule) throw new Error("Review storage is not configured.");
   const firestoreModule = await import("firebase/firestore");
   const database = firestoreModule.getFirestore(firebaseAppModule.getApp());
-  const savePromise = firestoreModule.addDoc(firestoreModule.collection(database, "customerReviews"), {
+  await firestoreModule.addDoc(firestoreModule.collection(database, "customerReviews"), {
     ...review,
     userId: currentAuth.currentUser?.uid ?? "",
     createdAt: firestoreModule.serverTimestamp(),
   });
-  const timeoutPromise = new Promise<never>((_, reject) => {
-    window.setTimeout(() => reject(new Error("Review storage timed out.")), 1_000);
-  });
-  await Promise.race([savePromise, timeoutPromise]);
 }
 
 export async function getCustomerReviews() {
@@ -164,9 +160,13 @@ export async function getCustomerReviews() {
   if (!firebaseAppModule) throw new Error("Review storage is not configured.");
   const firestoreModule = await import("firebase/firestore");
   const database = firestoreModule.getFirestore(firebaseAppModule.getApp());
-  const snapshot = await firestoreModule.getDocs(
+  const loadPromise = firestoreModule.getDocs(
     firestoreModule.collection(database, "customerReviews"),
   );
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    window.setTimeout(() => reject(new Error("Review loading timed out.")), 3_000);
+  });
+  const snapshot = await Promise.race([loadPromise, timeoutPromise]);
 
   return snapshot.docs
     .map((review) => {

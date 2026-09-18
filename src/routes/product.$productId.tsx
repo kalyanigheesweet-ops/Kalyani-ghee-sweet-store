@@ -154,8 +154,19 @@ function ProductPage() {
                 }
                 const review = { rating: reviewRating, comment };
                 const reviewKey = `kalyani.review.${product.id}`;
+                const localReview = {
+                  id: `local-${product.id}`,
+                  productId: product.id,
+                  productName: product.name,
+                  productImage: product.image,
+                  rating: reviewRating,
+                  comment,
+                  customerName: user.name,
+                  customerEmail: user.email,
+                  createdAt: new Date().toISOString(),
+                };
                 setReviewSaving(true);
-                window.localStorage.setItem(reviewKey, JSON.stringify(review));
+                window.localStorage.setItem(reviewKey, JSON.stringify(localReview));
                 setSubmittedReview(review);
                 setReviewError("");
                 setReviewStorageNotice("Review saved on this device.");

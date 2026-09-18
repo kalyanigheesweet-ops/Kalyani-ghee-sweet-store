@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MessageSquare, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { products } from "@/data/products";
 import { getCustomerReviews, isOwnerEmail, type CustomerReview } from "@/lib/auth-security";
 import { useStore } from "@/lib/store";
 
@@ -27,10 +28,38 @@ function ReviewsPage() {
       return;
     }
 
+    const localReviews = Object.keys(window.localStorage)
+      .filter((key) => key.startsWith("kalyani.review."))
+      .flatMap((key) => {
+        try {
+          const data = JSON.parse(window.localStorage.getItem(key) ?? "") as Partial<CustomerReview>;
+          const productId = String(data.productId ?? key.replace("kalyani.review.", ""));
+          const product = products.find((item) => item.id === productId);
+          if (!product || typeof data.rating !== "number" || typeof data.comment !== "string") return [];
+          return [{
+            id: String(data.id ?? `local-${product.id}`),
+            productId: product.id,
+            productName: product.name,
+            productImage: product.image,
+            rating: data.rating,
+            comment: data.comment,
+            customerName: String(data.customerName ?? "Local customer"),
+            customerEmail: String(data.customerEmail ?? ""),
+            createdAt: String(data.createdAt ?? ""),
+          } satisfies CustomerReview];
+        } catch {
+          return [];
+        }
+      });
+
     void getCustomerReviews()
-      .then(setReviews)
-      .catch((reason: unknown) => {
-        setError(reason instanceof Error ? reason.message : "Unable to load reviews.");
+      .then((cloudReviews) => {
+        const localIds = new Set(localReviews.map((review) => review.id));
+        setReviews([...localReviews, ...cloudReviews.filter((review) => !localIds.has(review.id))]);
+      })
+      .catch(() => {
+        setReviews(localReviews);
+        if (!localReviews.length) setError("Unable to load reviews from cloud storage.");
       })
       .finally(() => setLoading(false));
   }, [user]);
