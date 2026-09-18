@@ -233,30 +233,31 @@ function ProductPage() {
                   {reviewSaving ? "Saving..." : "Submit review"}
                 </button>
               </div>
-              {submittedReview && (
-                <div className="mt-4 flex gap-3 rounded-lg bg-secondary/60 p-3">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="size-16 shrink-0 rounded-md object-cover"
-                  />
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-primary">
-                      Added for Google Maps
-                    </p>
-                    <div className="mt-1 flex gap-1">
-                      {[1, 2, 3, 4, 5].map((value) => (
-                        <Star
-                          key={value}
-                          className={`size-4 ${value <= submittedReview.rating ? "fill-gold text-gold" : "text-border"}`}
-                        />
-                      ))}
-                    </div>
-                    <p className="mt-2 text-sm text-muted-foreground">{submittedReview.comment}</p>
-                  </div>
-                </div>
-              )}
             </form>
+          )}
+
+          {submittedReview && (
+            <div className="mt-4 flex max-w-lg gap-3 rounded-lg bg-secondary/60 p-3">
+              <img
+                src={product.image}
+                alt={product.name}
+                className="size-16 shrink-0 rounded-md object-cover"
+              />
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.12em] text-primary">
+                  Your submitted review
+                </p>
+                <div className="mt-1 flex gap-1" aria-label={`${submittedReview.rating} out of 5 stars`}>
+                  {[1, 2, 3, 4, 5].map((value) => (
+                    <Star
+                      key={value}
+                      className={`size-4 ${value <= submittedReview.rating ? "fill-gold text-gold" : "text-border"}`}
+                    />
+                  ))}
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">{submittedReview.comment}</p>
+              </div>
+            </div>
           )}
 
           <div className="mt-5 flex items-end gap-3">
