@@ -195,14 +195,6 @@ export function Header() {
                 )}
               </Link>
             )}
-            {user && isOwnerEmail(user.email) && (
-              <Link
-                to="/reviews"
-                className="hidden items-center gap-2 px-3 text-primary transition hover:text-brown lg:flex"
-              >
-                <span className="text-base font-semibold">Reviews</span>
-              </Link>
-            )}
             {user && (
               <Link
                 to="/wishlist"
