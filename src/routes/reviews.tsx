@@ -107,7 +107,9 @@ function ReviewsPage() {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h2 className="font-semibold text-primary">{review.productName}</h2>
-                  <p className="text-xs text-muted-foreground">{review.customerName} · {review.customerEmail}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {review.customerName} · {review.customerEmail || "Customer email unavailable"}
+                  </p>
                 </div>
                 <div className="flex shrink-0 gap-0.5" aria-label={`${review.rating} out of 5 stars`}>
                   {[1, 2, 3, 4, 5].map((value) => (

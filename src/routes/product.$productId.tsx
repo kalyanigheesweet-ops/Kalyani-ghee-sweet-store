@@ -60,6 +60,21 @@ function ProductPage() {
     try {
       const review = JSON.parse(savedReview) as { rating?: unknown; comment?: unknown };
       if (typeof review.rating !== "number" || typeof review.comment !== "string") return;
+      if (user && (!("customerEmail" in review) || !("customerName" in review))) {
+        window.localStorage.setItem(
+          `kalyani.review.${product.id}`,
+          JSON.stringify({
+            ...review,
+            id: `local-${product.id}`,
+            productId: product.id,
+            productName: product.name,
+            productImage: product.image,
+            customerName: user.name,
+            customerEmail: user.email,
+            createdAt: new Date().toISOString(),
+          }),
+        );
+      }
       setReviewRating(review.rating);
       setReviewComment(review.comment);
       setSubmittedReview({ rating: review.rating, comment: review.comment });
@@ -68,7 +83,7 @@ function ProductPage() {
     } catch {
       window.localStorage.removeItem(`kalyani.review.${product.id}`);
     }
-  }, [product.id]);
+  }, [product, user]);
 
   useEffect(() => {
     if (authReady && !user) {
