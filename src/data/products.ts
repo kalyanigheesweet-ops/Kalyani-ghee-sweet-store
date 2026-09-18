@@ -363,8 +363,8 @@ export const products: Product[] = [
   mk("Idli Karam", "Powders", 80, idliKaramImage, { tagline: "Classic idli milagai podi", weights: ["150 g"], rating: 4.8, reviews: 178, badge: "Best Seller", ingredients: `Urad dal, chana dal, red chilli, ${powderIng}` }),
 
   // ---------- PAPADS (per kg) ----------
-  mk("Palakura Papad", "Papads", 600, palakuraPapadImage, { weights: ["100 g"], ingredients: "Spinach, rice flour, cumin, spices, salt" }),
-  mk("Biyyam Papad", "Papads", 500, biyyamPapadImage, { weights: ["100 g"], tagline: "Sun-dried rice papads", ingredients: "Rice flour, cumin, salt" }),
+  mk("Palakura Papad", "Papads", 60, palakuraPapadImage, { weights: ["100 g"], ingredients: "Spinach, rice flour, cumin, spices, salt" }),
+  mk("Biyyam Papad", "Papads", 50, biyyamPapadImage, { weights: ["100 g"], tagline: "Sun-dried rice papads", ingredients: "Rice flour, cumin, salt" }),
   mk("Sabudhana Papad", "Papads", 400, sabudhanaPapadImage, { ingredients: "Sago, cumin, salt" }),
   mk("Challa Mirchi", "Papads", 70, challaMirchiImage, { weights: ["100 g"], tagline: "Sun-cured buttermilk chillies", rating: 4.7, reviews: 92, badge: "New", ingredients: "Green chillies, buttermilk, salt" }),
 

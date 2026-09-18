@@ -16,7 +16,6 @@ export function ProductCard({
   const [ratingOpen, setRatingOpen] = useState(false);
   const [userRating, setUserRating] = useState<number | null>(null);
   const liked = wishlist.includes(product.id);
-  const displayedRating = userRating ?? product.rating;
 
   return (
     <article className="group card-surface relative flex max-w-[240px] flex-col overflow-hidden transition duration-300 hover:shadow-[var(--shadow-lift)] sm:max-w-none">
@@ -71,13 +70,12 @@ export function ProductCard({
             <button
               type="button"
               aria-expanded={ratingOpen}
-              aria-label={`Rate ${product.name}. Current rating ${displayedRating}`}
+              aria-label={`Rate ${product.name}`}
               title="Click to rate this product"
               onClick={() => setRatingOpen((open) => !open)}
               className="flex cursor-pointer items-center gap-1 rounded-full bg-secondary px-1.5 py-0.5 text-[10px] font-semibold text-primary transition hover:bg-gold/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
             >
-              <Star className="size-3 fill-gold text-gold" />
-              {displayedRating}
+              <Star className={`size-3 ${userRating ? "fill-gold text-gold" : "text-gold"}`} />
             </button>
             {ratingOpen && (
               <div className="absolute right-0 top-full z-20 mt-1 flex items-center gap-0.5 rounded-full border border-gold-soft bg-card p-1 shadow-[var(--shadow-card)]">
@@ -92,7 +90,7 @@ export function ProductCard({
                     }}
                     className="rounded-full p-1 text-muted-foreground transition hover:bg-secondary hover:text-gold"
                   >
-                    <Star className="size-3.5 fill-current" />
+                    <Star className={`size-3.5 ${value <= (userRating ?? 0) ? "fill-gold text-gold" : ""}`} />
                   </button>
                 ))}
               </div>

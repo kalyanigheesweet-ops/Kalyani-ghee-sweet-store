@@ -148,11 +148,15 @@ export async function saveCustomerReview(review: Omit<CustomerReview, "id" | "cr
   if (!firebaseAppModule) throw new Error("Review storage is not configured.");
   const firestoreModule = await import("firebase/firestore");
   const database = firestoreModule.getFirestore(firebaseAppModule.getApp());
-  await firestoreModule.addDoc(firestoreModule.collection(database, "customerReviews"), {
+  const savePromise = firestoreModule.addDoc(firestoreModule.collection(database, "customerReviews"), {
     ...review,
     userId: currentAuth.currentUser?.uid ?? "",
     createdAt: firestoreModule.serverTimestamp(),
   });
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    window.setTimeout(() => reject(new Error("Review storage timed out.")), 1_000);
+  });
+  await Promise.race([savePromise, timeoutPromise]);
 }
 
 export async function getCustomerReviews() {

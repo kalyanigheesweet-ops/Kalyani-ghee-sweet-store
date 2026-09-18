@@ -43,8 +43,7 @@ export function QuickView({
             <p className="eyebrow">{product.category}</p>
             <h3 className="mt-1 text-2xl text-primary">{product.name}</h3>
             <p className="mt-1 flex items-center gap-1 text-sm text-brown">
-              <Star className="size-4 fill-gold text-gold" /> {product.rating} ·{" "}
-              {product.reviews} reviews
+              <Star className="size-4 text-gold" /> {product.reviews} reviews
             </p>
             <p className="mt-3 text-sm text-muted-foreground">{product.tagline}</p>
             <p className="mt-3 text-xs text-muted-foreground">

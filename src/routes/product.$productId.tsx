@@ -118,11 +118,11 @@ function ProductPage() {
               aria-expanded={reviewOpen}
               aria-controls="product-review-form"
               title="Click to rate this product"
+              aria-label={`Rate ${product.name}`}
               onClick={() => setReviewOpen((open) => !open)}
               className="flex cursor-pointer items-center gap-1 rounded-full bg-secondary px-2.5 py-1 font-semibold text-primary transition hover:bg-gold/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
             >
-              <Star className="size-3.5 fill-gold text-gold" />
-              {product.rating}
+              <Star className="size-3.5 text-gold" />
             </button>
             <span className="text-muted-foreground">{product.reviews} reviews</span>
             <button
@@ -155,33 +155,28 @@ function ProductPage() {
                 const review = { rating: reviewRating, comment };
                 const reviewKey = `kalyani.review.${product.id}`;
                 setReviewSaving(true);
-                try {
-                  await saveCustomerReview({
-                    ...review,
-                    productId: product.id,
-                    productName: product.name,
-                    productImage: product.image,
-                    customerName: user.name,
-                    customerEmail: user.email,
-                  });
-                  setSubmittedReview(review);
-                  window.localStorage.setItem(reviewKey, JSON.stringify(review));
-                  setReviewError("");
-                  setReviewStorageNotice("Review submitted for the store owner.");
-                  setReviewSubmitted(true);
-                  setReviewOpen(false);
-                } catch (error) {
-                  window.localStorage.setItem(reviewKey, JSON.stringify(review));
-                  setSubmittedReview(review);
-                  setReviewError("");
-                  setReviewStorageNotice(
-                    "Saved on this device. Cloud sync is unavailable, so the store owner cannot see it yet.",
+                window.localStorage.setItem(reviewKey, JSON.stringify(review));
+                setSubmittedReview(review);
+                setReviewError("");
+                setReviewStorageNotice("Review saved on this device.");
+                setReviewSubmitted(true);
+                setReviewOpen(false);
+                setReviewSaving(false);
+
+                void saveCustomerReview({
+                  ...review,
+                  productId: product.id,
+                  productName: product.name,
+                  productImage: product.image,
+                  customerName: user.name,
+                  customerEmail: user.email,
+                })
+                  .then(() => setReviewStorageNotice("Review submitted for the store owner."))
+                  .catch(() =>
+                    setReviewStorageNotice(
+                      "Saved on this device. Cloud sync is unavailable, so the store owner cannot see it yet.",
+                    ),
                   );
-                  setReviewSubmitted(true);
-                  setReviewOpen(false);
-                } finally {
-                  setReviewSaving(false);
-                }
               }}
             >
               <p className="text-sm font-bold text-primary">Write a review</p>
