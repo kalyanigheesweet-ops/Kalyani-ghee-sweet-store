@@ -46,11 +46,29 @@ function ProductPage() {
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
   const [reviewError, setReviewError] = useState("");
   const [reviewSaving, setReviewSaving] = useState(false);
+  const [reviewStorageNotice, setReviewStorageNotice] = useState("");
   const [submittedReview, setSubmittedReview] = useState<{
     rating: number;
     comment: string;
   } | null>(null);
   const liked = wishlist.includes(product.id);
+
+  useEffect(() => {
+    const savedReview = window.localStorage.getItem(`kalyani.review.${product.id}`);
+    if (!savedReview) return;
+
+    try {
+      const review = JSON.parse(savedReview) as { rating?: unknown; comment?: unknown };
+      if (typeof review.rating !== "number" || typeof review.comment !== "string") return;
+      setReviewRating(review.rating);
+      setReviewComment(review.comment);
+      setSubmittedReview({ rating: review.rating, comment: review.comment });
+      setReviewSubmitted(true);
+      setReviewStorageNotice("Review saved on this device.");
+    } catch {
+      window.localStorage.removeItem(`kalyani.review.${product.id}`);
+    }
+  }, [product.id]);
 
   useEffect(() => {
     if (authReady && !user) {
@@ -115,6 +133,9 @@ function ProductPage() {
               Write a review
             </button>
           </div>
+          {reviewSubmitted && !reviewOpen && (
+            <p className="mt-2 text-xs font-semibold text-primary">Review submitted successfully.</p>
+          )}
 
           {reviewOpen && (
             <form
@@ -132,6 +153,7 @@ function ProductPage() {
                   return;
                 }
                 const review = { rating: reviewRating, comment };
+                const reviewKey = `kalyani.review.${product.id}`;
                 setReviewSaving(true);
                 try {
                   await saveCustomerReview({
@@ -143,15 +165,20 @@ function ProductPage() {
                     customerEmail: user.email,
                   });
                   setSubmittedReview(review);
-                  window.localStorage.setItem(`kalyani.review.${product.id}`, JSON.stringify(review));
+                  window.localStorage.setItem(reviewKey, JSON.stringify(review));
                   setReviewError("");
+                  setReviewStorageNotice("Review submitted for the store owner.");
                   setReviewSubmitted(true);
+                  setReviewOpen(false);
                 } catch (error) {
-                  setReviewError(
-                    error instanceof Error
-                      ? error.message
-                      : "Unable to save your review. Please try again.",
+                  window.localStorage.setItem(reviewKey, JSON.stringify(review));
+                  setSubmittedReview(review);
+                  setReviewError("");
+                  setReviewStorageNotice(
+                    "Saved on this device. Cloud sync is unavailable, so the store owner cannot see it yet.",
                   );
+                  setReviewSubmitted(true);
+                  setReviewOpen(false);
                 } finally {
                   setReviewSaving(false);
                 }
@@ -183,6 +210,7 @@ function ProductPage() {
                   setReviewComment(event.target.value);
                   setReviewSubmitted(false);
                   setReviewError("");
+                  setReviewStorageNotice("");
                 }}
                 placeholder="Share your experience"
                 aria-label="Your review"
@@ -193,7 +221,7 @@ function ProductPage() {
               {reviewError && <p className="mt-2 text-xs font-semibold text-primary">{reviewError}</p>}
               <div className="mt-2 flex items-center justify-between gap-3">
                 <span className="text-xs text-muted-foreground">
-                  {reviewSubmitted ? "Review submitted for the store owner." : ""}
+                  {reviewSubmitted ? reviewStorageNotice : ""}
                 </span>
                 <button type="submit" disabled={reviewSaving} className="btn-primary px-4 py-2 text-xs">
                   {reviewSaving ? "Saving..." : "Submit review"}

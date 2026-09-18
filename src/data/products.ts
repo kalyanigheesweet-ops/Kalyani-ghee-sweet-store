@@ -280,9 +280,9 @@ export const products: Product[] = [
   mk("Jangri", "Sweets", 320, jangriImage, { ingredients: "Urad dal, sugar syrup, saffron" }),
   mk("Mango Jelli", "Sweets", 520, mangoJelliImage, { tagline: "Real mango pulp jelly bites", badge: "New", ingredients: "Mango pulp, sugar, ghee" }),
   mk("Bakshalu", "Sweets", 100, bakshaluImage, { weights: ["1 packet"], ingredients: "Wheat flour, jaggery, chana dal, ghee" }),
-  mk("Chinna Kova (Peda)", "Sweets", 600, chinnaKovaImage, { ingredients: "milk, sugar, ghee" }),
-  mk("Madatha Kaja", "Sweets", 600, madathaKajaImage, { ingredients: "Maida, sugar, ghee" }),
-  mk("Suryakala", "Sweets", 600, suryakalaImage, { ingredients: "Maida, sugar, ghee" }),
+  mk("Chinna Kova (Peda)", "Sweets", 440, chinnaKovaImage, { ingredients: "milk, sugar, ghee" }),
+  mk("Madatha Kaja", "Sweets", 640, madathaKajaImage, { ingredients: "Maida, sugar, ghee" }),
+  mk("Suryakala", "Sweets", 640, suryakalaImage, { ingredients: "Maida, sugar, ghee" }),
 
   // ---------- LADDU'S (per kg) ----------
   mk("Dry Fruits Laddu (Sugar)", "Laddu's", 1120, dryFruitLadduSugarImage, { rating: 4.9, reviews: 260, badge: "Best Seller", ingredients: "Dates, mixed dry fruits, sugar, ghee" }),
