@@ -55,7 +55,7 @@ function withSecurityHeaders(response: Response, request: Request) {
       "frame-ancestors 'none'",
       "form-action 'self'",
       "script-src 'self' 'unsafe-inline' https://accounts.google.com https://apis.google.com",
-      "connect-src 'self' https://accounts.google.com https://apis.google.com https://www.googleapis.com https://identitytoolkit.googleapis.com",
+      "connect-src 'self' https://accounts.google.com https://apis.google.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://firestore.googleapis.com https://firebasestorage.googleapis.com",
       "img-src 'self' data: blob: https:",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",

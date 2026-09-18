@@ -89,7 +89,9 @@ export const STORE_ADDRESS =
 export const STORE_MAP_URL = "https://share.google/VQb92HIMgUUII8o32";
 
 export const priceFor = (base: number, weight: string) => {
-  if (/packet|box|\bpc\b|piece/i.test(weight) || weight === "150 g") return base;
+  if (/packet|box|\bpc\b|piece/i.test(weight) || weight === "100 g" || weight === "150 g") {
+    return base;
+  }
   const grams = weight.includes("kg") ? parseFloat(weight) * 1000 : parseFloat(weight);
   return Math.round(base * (grams / 1000 || 1));
 };
